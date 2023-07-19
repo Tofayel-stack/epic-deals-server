@@ -35,16 +35,74 @@ async function dbConnect() {
 dbConnect()
 
 // collections
-const usersCollection = client.db("epic-deals-e-commerce").collection("regular-users");
-
-
-// hi
+const usersCollection = client.db("epic-deals-e-commerce").collection("users");
 
 
 
-//  Here will start all API calls 
 
 
+
+// Get API 
+
+
+// get a user by _id
+app.get('/user',async(req,res)=>{
+  try {
+    const id = req.query.id;
+    const query = {_id:new ObjectId(id)}
+    const result = await usersCollection.findOne(query)
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
+
+
+//  Post API 
+
+// create a user When he/she register frist time
+app.post('/createUser',async(req,res)=>{
+  try {
+    const userData = req.body;
+
+    const result = await usersCollection.insertOne(userData)
+     if (result.acknowledged) {
+      res.send({
+        message: "user creation successfully ",
+        data: result,
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "creation failed! for some issue!",
+      data: null,
+    });
+  }
+})
 //...
 
 app.get('/', (req, res) => {
