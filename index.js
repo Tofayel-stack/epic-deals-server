@@ -48,8 +48,8 @@ const usersCollection = client.db("epic-deals-e-commerce").collection("users");
 // get a user by _id
 app.get('/user',async(req,res)=>{
   try {
-    const id = req.query.id;
-    const query = {_id:new ObjectId(id)}
+    const email = req.query.email;
+    const query = {email:email}
     const result = await usersCollection.findOne(query)
 
     if (result) {
