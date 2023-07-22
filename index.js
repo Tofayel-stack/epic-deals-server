@@ -36,6 +36,7 @@ dbConnect()
 
 // collections
 const usersCollection = client.db("epic-deals-e-commerce").collection("users");
+const productCollection = client.db("epic-deals-e-commerce").collection("product");
 
 
 
@@ -75,6 +76,39 @@ app.get('/user',async(req,res)=>{
   }
 })
 //...
+// get selling product of a seller
+app.get('/sellingProduct',async(req,res)=>{
+  try {
+    const email = req.query.email;
+    const query = {sellerEmail:email}
+    const result = await productCollection.find(query).toArray()
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
 
 
 
@@ -104,6 +138,33 @@ app.post('/createUser',async(req,res)=>{
   }
 })
 //...
+
+// add a product by a seller in Database
+app.post('/addProduct',async(req,res)=>{
+  try {
+    const productData = req.body;
+
+    const result = await productCollection.insertOne(productData)
+     if (result.acknowledged) {
+      res.send({
+        message: "product added successfully ",
+        data: result,
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "creation failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
+
 
 app.get('/', (req, res) => {
   res.send('epic deals server is running !!! ')
