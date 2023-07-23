@@ -137,6 +137,36 @@ app.get('/typeOfUser',async(req,res)=>{
   }
 })
 //...
+// get categori of products    
+app.get('/categoriProduct/:categori',async(req,res)=>{
+  try {
+    const categori = req.params.categori;
+    const query = {categories:categori}
+    const result = await productCollection.find(query).toArray()
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
 
 
 
