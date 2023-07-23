@@ -107,6 +107,37 @@ app.get('/sellingProduct',async(req,res)=>{
 })
 //...
 
+// get type of alluser seller/buyer   
+app.get('/typeOfUser',async(req,res)=>{
+  try {
+    const type = req.query.type;
+    const query = {userType:type}
+    const result = await usersCollection.find(query).toArray()
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
 
 
 
@@ -161,6 +192,78 @@ app.post('/addProduct',async(req,res)=>{
   }
 })
 //...
+
+
+
+// PUT oparation 
+
+
+// update the seller by verify   
+
+app.put('/verifyUser',async(req,res)=>{
+  try {
+    const id = req.query.id
+    const query = {_id:new ObjectId(id)}
+
+    const options = { upsert: true };
+
+    const updateDoc = {
+      $set: {
+        verify: true
+      },
+    };
+
+    const result = await usersCollection.updateOne(query,updateDoc,options)
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully updated`,
+        data: result,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
+
+
+// Delete API 
+
+
+// delete specific user
+app.delete('/user',async(req,res)=>{
+  try {
+    const id = req.query.id
+    const query = {_id:new ObjectId(id)}
+    const result = await usersCollection.deleteOne(query)
+
+    if (result) {
+      res.status(200).send({
+        success: true,
+        message: `successfully updated`,
+        data: result,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
 
 
 
