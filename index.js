@@ -76,7 +76,7 @@ app.get('/user',async(req,res)=>{
   }
 })
 //...
-// get selling product of a seller
+// get all product of a seller by email
 app.get('/sellingProduct',async(req,res)=>{
   try {
     const email = req.query.email;
@@ -107,7 +107,7 @@ app.get('/sellingProduct',async(req,res)=>{
 })
 //...
 
-// get type of alluser seller/buyer   
+// get type of alluser seller/buyer  used for admin dashboard 
 app.get('/typeOfUser',async(req,res)=>{
   try {
     const type = req.query.type;
@@ -137,7 +137,7 @@ app.get('/typeOfUser',async(req,res)=>{
   }
 })
 //...
-// get categori of products    
+// get all product accordin to diffrient type of category   
 app.get('/categoriProduct/:categori',async(req,res)=>{
   try {
     const categori = req.params.categori;
@@ -145,7 +145,7 @@ app.get('/categoriProduct/:categori',async(req,res)=>{
     const result = await productCollection.find(query).toArray()
 
     if (result) {
-      res.status(200).send({
+      res.status(200).send({  
         success: true,
         message: `successfully found`,
         data: result,
@@ -261,6 +261,39 @@ app.put('/verifyUser',async(req,res)=>{
   }
 })
 //...
+// update single product for add to advertise according to id
+app.put('/product/:id',async(req,res)=>{
+  try {
+    const id = req.params.id;
+    const query = {_id:new ObjectId(id)}
+    const options = { upsert: true };
+    const updateDoc = {
+      $set: {
+        addOnHotDeals : true
+      },
+    };
+
+    const result = await productCollection.updateOne(query,updateDoc,options)
+
+    if (result) {
+      res.status(200).send({  
+        success: true,
+        message: `successfully updated`,
+        data: result,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
 
 
 
