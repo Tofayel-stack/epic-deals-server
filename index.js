@@ -167,6 +167,36 @@ app.get('/categoriProduct/:categori',async(req,res)=>{
   }
 })
 //...
+// get all product of which are added in HOT DEALS  
+app.get('/hotDealsProduct',async(req,res)=>{
+  try {
+   
+    const query = {addOnHotDeals:true}
+    const result = await productCollection.find(query).toArray()
+
+    if (result) {
+      res.status(200).send({  
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
 
 
 
