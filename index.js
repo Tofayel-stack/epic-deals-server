@@ -198,6 +198,38 @@ app.get('/hotDealsProduct',async(req,res)=>{
 })
 //...
 
+// get specific  product of by ID
+app.get('/product/:id',async(req,res)=>{
+
+  try {
+    const id = req.params.id;
+    const query = {_id: new ObjectId(id)}
+    const result = await productCollection.findOne(query)
+
+    if (result) {
+      res.status(200).send({  
+        success: true,
+        message: `successfully found`,
+        data: result,
+      });
+    } else {
+      res.status(200).send({
+        success: false,
+        message: `Not found`,
+        data: [],
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
 
 
 
