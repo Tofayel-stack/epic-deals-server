@@ -37,6 +37,7 @@ dbConnect()
 // collections
 const usersCollection = client.db("epic-deals-e-commerce").collection("users");
 const productCollection = client.db("epic-deals-e-commerce").collection("product");
+const productCommentCollection = client.db("epic-deals-e-commerce").collection("product-comment");
 
 
 
@@ -107,7 +108,7 @@ app.get('/sellingProduct',async(req,res)=>{
 })
 //...
 
-// get type of alluser seller/buyer  used for admin dashboard 
+// get type of all user seller/buyer  used for admin dashboard 
 app.get('/typeOfUser',async(req,res)=>{
   try {
     const type = req.query.type;
@@ -137,7 +138,7 @@ app.get('/typeOfUser',async(req,res)=>{
   }
 })
 //...
-// get all product accordin to diffrient type of category   
+// get all product according to different type of category   
 app.get('/categoriProduct/:categori',async(req,res)=>{
   try {
     const categori = req.params.categori;
@@ -230,6 +231,30 @@ app.get('/product/:id',async(req,res)=>{
 })
 //...
 
+// get  all product review for Each product search by product id in database 
+app.get('/product-comment',async(req,res)=>{
+  try {
+   
+    const productID = req.query.id;
+    const query = { productID: productID }
+    const result = await productCommentCollection.find(query).toArray()
+
+     if (result.length !== 0) {
+      res.send({
+        message: "Data find successfully",
+        data: result,
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "operation failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
 
 
 
@@ -239,7 +264,7 @@ app.get('/product/:id',async(req,res)=>{
 
 //  Post API 
 
-// create a user When he/she register frist time
+// create a user When he/she register first time
 app.post('/createUser',async(req,res)=>{
   try {
     const userData = req.body;
@@ -286,8 +311,33 @@ app.post('/addProduct',async(req,res)=>{
 //...
 
 
+// add a product review for Each product by a buyer  in Database
+app.post('/product-comment',async(req,res)=>{
+  try {
+    const productComment = req.body;
 
-// PUT oparation 
+    const result = await productCommentCollection.insertOne(productComment)
+
+     if (result.acknowledged) {
+      res.send({
+        message: "Added successfully",
+        data: result,
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "creation failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+
+
+// PUT operation
 
 
 // update the seller by verify   
