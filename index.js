@@ -82,7 +82,7 @@ app.get('/sellingProduct',async(req,res)=>{
   try {
     const email = req.query.email;
     const query = {sellerEmail:email}
-    const result = await productCollection.find(query).toArray()
+    // const result = await productCollection.find(query).toArray()
 
     if (result) {
       res.status(200).send({
@@ -138,12 +138,13 @@ app.get('/typeOfUser',async(req,res)=>{
   }
 })
 //...
+
 // get all product according to different type of category   
-app.get('/categoriProduct/:categori',async(req,res)=>{
+app.get('/categoryProduct/:category',async(req,res)=>{
   try {
-    const categori = req.params.categori;
-    const query = {categories:categori}
-    const result = await productCollection.find(query).toArray()
+    const category = req.params.category;
+    const query = {categories:category}
+    // const result = await productCollection.find(query).toArray()
 
     if (result) {
       res.status(200).send({  
@@ -168,10 +169,37 @@ app.get('/categoriProduct/:categori',async(req,res)=>{
   }
 })
 //...
+
+// get all product according to different type of category   
+
+app.get('/product',async(req,res)=>{
+  try {
+    const condition = req.query.condition;
+    const query = {productCondition:condition};
+    const result = await productCollection.find(query).toArray()
+
+    if (result){
+      res.status(200).send({  
+        success: true,
+        message: `successfully found`,
+        data:result,
+      });
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "something is going wrong !!!",
+      data: null,
+    });
+  }
+})
+//...
+
+
 // get all product of which are added in HOT DEALS  
 app.get('/hotDealsProduct',async(req,res)=>{
   try {
-   
+    
     const query = {addOnHotDeals:true}
     const result = await productCollection.find(query).toArray()
 
