@@ -12,7 +12,7 @@ app.use(express.json())
 
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWARD}@cluster0.dcb0xdp.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dcb0xdp.mongodb.net/?retryWrites=true&w=majority`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
 const client = new MongoClient(uri, {
@@ -82,7 +82,7 @@ app.get('/sellingProduct',async(req,res)=>{
   try {
     const email = req.query.email;
     const query = {sellerEmail:email}
-    // const result = await productCollection.find(query).toArray()
+    const result = await productCollection.find(query).toArray()
 
     if (result) {
       res.status(200).send({
@@ -144,7 +144,7 @@ app.get('/categoryProduct/:category',async(req,res)=>{
   try {
     const category = req.params.category;
     const query = {categories:category}
-    // const result = await productCollection.find(query).toArray()
+    const result = await productCollection.find(query).toArray()
 
     if (result) {
       res.status(200).send({  
@@ -401,16 +401,18 @@ app.put('/verifyUser',async(req,res)=>{
   }
 })
 //...
-// update single product for add to advertise according to id
+
+// update single product  for multiple purpose (like add to hotDeals and report items)
+
 app.put('/product/:id',async(req,res)=>{
   try {
     const id = req.params.id;
+    const body = req.body;
+    
     const query = {_id:new ObjectId(id)}
     const options = { upsert: true };
     const updateDoc = {
-      $set: {
-        addOnHotDeals : true
-      },
+      $set: body ,  //this data is already object //
     };
 
     const result = await productCollection.updateOne(query,updateDoc,options)
