@@ -170,13 +170,27 @@ app.get('/categoryProduct/:category',async(req,res)=>{
 })
 //...
 
-// get all product according to different type of category   
+
+
+// get all product by dynamically search on different different key in a object of a product ( used in used product & hotDeals & reported item ) 
 
 app.get('/product',async(req,res)=>{
   try {
-    const condition = req.query.condition;
-    const query = {productCondition:condition};
-    const result = await productCollection.find(query).toArray()
+    const key = req.query.key;
+    const valueAsString = req.query.value;
+    
+    if(valueAsString === 'true' || valueAsString === 'false'){
+      let value = JSON.parse(valueAsString);
+      var searchObject = { [key]: value };
+    }else{
+      var searchObject = { [key]: valueAsString };
+    }
+    
+  
+    console.log(searchObject);
+
+
+    const result = await productCollection.find(searchObject).toArray()
 
     if (result){
       res.status(200).send({  
@@ -195,37 +209,6 @@ app.get('/product',async(req,res)=>{
 })
 //...
 
-
-// get all product of which are added in HOT DEALS  
-app.get('/hotDealsProduct',async(req,res)=>{
-  try {
-    
-    const query = {addOnHotDeals:true}
-    const result = await productCollection.find(query).toArray()
-
-    if (result) {
-      res.status(200).send({  
-        success: true,
-        message: `successfully found`,
-        data: result,
-      });
-    } else {
-      res.status(200).send({
-        success: false,
-        message: `Not found`,
-        data: [],
-      });
-    }
-    
-  } catch (error) {
-    console.log(error.message);
-    res.status(404).send({
-      message: "failed! for some issue!",
-      data: null,
-    });
-  }
-})
-//...
 
 // get specific  product of by ID
 app.get('/product/:id',async(req,res)=>{
