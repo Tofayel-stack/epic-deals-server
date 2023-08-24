@@ -185,10 +185,6 @@ app.get('/product',async(req,res)=>{
     }else{
       var searchObject = { [key]: valueAsString };
     }
-    
-  
-    console.log(searchObject);
-
 
     const result = await productCollection.find(searchObject).toArray()
 
