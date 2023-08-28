@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv').config()
 // mongodb 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// This is your test secret API key.
+// const stripe = require("stripe")('sk_test_51NT9CXKsYUuM4tCt64tMdWvqJOZwglkBTSabuZp4yQ7XjDU2xNZtpjzcMKwBVFQmXzkBr7Ob5OwrJfbgF2A2vJw400b2LECgsA');
+// app.use(express.static("public"));
+
 // middleware 
 app.use(cors())
 app.use(express.json())
@@ -448,6 +452,24 @@ app.delete('/user',async(req,res)=>{
 //...
 
 
+
+//PAYMENT SYSTEM 
+
+    // // create payment intent
+    // app.post('/create-payment-intent', async (req, res) => {
+    //   const { price } = req.body;
+    //   const amount = parseInt(price * 100);
+    //   console.log(price,amount);
+    //   const paymentIntent = await stripe.paymentIntents.create({
+    //     amount: amount,
+    //     currency: 'usd',
+    //     payment_method_types: ['card']
+    //   });
+
+    //   res.send({
+    //     clientSecret: paymentIntent.client_secret
+    //   })
+    // })
 
 
 
