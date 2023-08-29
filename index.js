@@ -42,6 +42,7 @@ dbConnect()
 const usersCollection = client.db("epic-deals-e-commerce").collection("users");
 const productCollection = client.db("epic-deals-e-commerce").collection("product");
 const productCommentCollection = client.db("epic-deals-e-commerce").collection("product-comment");
+const paidOrderCollection = client.db("epic-deals-e-commerce").collection("paid-order");
 
 
 
@@ -458,7 +459,7 @@ app.delete('/user',async(req,res)=>{
     // // create payment intent
     app.post('/create-payment-intent', async (req, res) => {
       const productData = req.body;
-       const price = productData.price;
+      const price = productData.price;
       const amount = parseInt(price * 100);
    
       const paymentIntent = await stripe.paymentIntents.create({
@@ -472,6 +473,23 @@ app.delete('/user',async(req,res)=>{
       })
     })
 
+
+    //  save the payment data in database
+    app.post('/paidProduct', async (req,res)=>{
+      try {
+      const paymentInfo = req.body;
+      const result = await paidOrderCollection.insertOne(paymentInfo)
+
+      res.status(200).send(result)
+
+      } catch (error) {
+        console.log(error.message);
+        res.status(404).send({
+          message: "failed! for some issue!",
+          data: null,
+      })
+     }
+    })
 
 
 
