@@ -252,7 +252,31 @@ app.get('/product-comment',async(req,res)=>{
     const result = await productCommentCollection.find(query).toArray()
 
      if (result.length !== 0) {
-      res.send({
+      res.status(200).send({
+        message: "Data find successfully",
+        data: result,
+      });
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send({
+      message: "operation failed! for some issue!",
+      data: null,
+    });
+  }
+})
+//...
+
+// get  all paid product . which are pending to delivery ( used on my order page )
+app.get('/paidOrder',async(req,res)=>{
+  try {
+    const buyerEmail = req.query.buyerEmail;
+    const query = {buyerEmail:buyerEmail}
+    const result = await paidOrderCollection.find(query).toArray()
+
+     if (result.length !== 0) {
+      res.status(200).send({
         message: "Data find successfully",
         data: result,
       });
