@@ -7,7 +7,7 @@ const dotenv = require('dotenv').config()
 // mongodb 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // This is your test secret API key.
-const stripe = require("stripe")('sk_test_51NT9CXKsYUuM4tCt64tMdWvqJOZwglkBTSabuZp4yQ7XjDU2xNZtpjzcMKwBVFQmXzkBr7Ob5OwrJfbgF2A2vJw400b2LECgsA');
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 app.use(express.static("public"));
 
 // middleware 
@@ -291,9 +291,6 @@ app.get('/paidOrder',async(req,res)=>{
   }
 })
 //...
-
-
-
 
 
 
